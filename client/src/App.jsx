@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import InterviewSession from './components/Interview/InterviewSession';
 import './App.css';
 
 function App() {
@@ -65,18 +66,23 @@ function App() {
     setAnswers(newAnswers);
   };
 
-  const handleSubmitAnswers = async () => {
+  const handleSubmitAnswers = async (finalAnswers) => {
     setError('');
     setEvaluating(true);
+    
+    // Use the passed answers if available, otherwise fallback to state (for safety)
+    const answersToSubmit = finalAnswers || answers;
 
     try {
       const response = await axios.post('http://localhost:5000/api/evaluate-answers', {
         interviewId,
-        answers
+        answers: answersToSubmit
       });
 
       if (response.data && response.data.evaluation) {
         setEvaluation(response.data.evaluation);
+        // Also update local state to match what was submitted, for display consistency
+        setAnswers(answersToSubmit);
       }
     } catch (err) {
       console.error(err);
@@ -131,34 +137,21 @@ function App() {
 
         {questions.length > 0 && !evaluation && (
           <section className="results-section">
-            <div className="questions-card">
-              <h2>Interview Questions</h2>
-              <p className="instruction-text">Please answer the following questions to the best of your ability.</p>
-              
-              <div className="questions-list">
-                {questions.map((q, index) => (
-                  <div key={index} className="question-item-container">
-                    <div className="question-text">
-                      <span className="question-number">Q{index + 1}.</span>
-                      {q}
-                    </div>
-                    <textarea 
-                      className="answer-textarea"
-                      placeholder="Type your answer here..."
-                      rows="4"
-                      value={answers[index] || ''}
-                      onChange={(e) => handleAnswerChange(index, e.target.value)}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <button onClick={handleSubmitAnswers} className="btn-generate btn-evaluate" disabled={evaluating}>
-                {evaluating ? 'Evaluating Answers...' : 'Submit Answers'}
-              </button>
-              
-              {error && <p className="error-message">{error}</p>}
-            </div>
+             {evaluating ? (
+                 <div className="loading-indicator">
+                     <div className="spinner"></div>
+                     <h2>Validating & Scoring Answers...</h2>
+                     <p>The AI is analyzing your responses against the job requirements.</p>
+                 </div>
+             ) : (
+                 <InterviewSession 
+                    questions={questions}
+                    onComplete={(collectedAnswers) => {
+                        setAnswers(collectedAnswers);
+                        handleSubmitAnswers(collectedAnswers);
+                    }}
+                 />
+             )}
           </section>
         )}
 
