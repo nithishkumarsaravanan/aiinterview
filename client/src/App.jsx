@@ -167,16 +167,55 @@ function App() {
              <div className="evaluation-card">
                 <h2>Interview Evaluation</h2>
                 
-                <div className="score-container">
-                  <div className="score-label">Technical Score</div>
-                  <div className={`score-value ${evaluation.score >= 7 ? 'high' : evaluation.score >= 4 ? 'medium' : 'low'}`}>
-                    {evaluation.score}/10
+                <div className="evaluation-header">
+                  <div className="score-container">
+                    <div className="score-label">Overall Score</div>
+                    <div className={`score-value ${evaluation.overall_score >= 7 ? 'high' : evaluation.overall_score >= 4 ? 'medium' : 'low'}`}>
+                      {evaluation.overall_score}/10
+                    </div>
+                  </div>
+                  
+                  <div className={`recommendation-badge ${
+                    evaluation.recommendation.includes('Strong') ? 'high' : 
+                    evaluation.recommendation.includes('Reject') ? 'low' : 'medium'
+                  }`}>
+                    {evaluation.recommendation}
                   </div>
                 </div>
 
-                <div className="feedback-container">
-                  <h3>Feedback</h3>
-                  <p className="feedback-text">{evaluation.feedback}</p>
+                <div className="analysis-grid">
+                  <div className="analysis-column">
+                    <h3>Strengths</h3>
+                    <ul className="analysis-list strengths">
+                      {evaluation.strengths.map((str, i) => <li key={i}>{str}</li>)}
+                    </ul>
+                  </div>
+                  <div className="analysis-column">
+                    <h3>Weaknesses</h3>
+                    <ul className="analysis-list weaknesses">
+                      {evaluation.weaknesses.map((weak, i) => <li key={i}>{weak}</li>)}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="detailed-feedback">
+                  <h3>Question Analysis</h3>
+                  {questions.map((q, i) => (
+                    <div key={i} className="feedback-item">
+                      <div className="feedback-question">
+                        <strong>Q{i+1}: </strong> {q}
+                      </div>
+                      <div className="feedback-answer">
+                         <strong>Your Answer: </strong> {answers[i] || <i>No answer provided</i>}
+                      </div>
+                      <div className="feedback-meta">
+                        <span className={`mini-score ${evaluation.scores[i] >= 7 ? 'high' : 'low'}`}>
+                          Score: {evaluation.scores[i]}/10
+                        </span>
+                        <p className="feedback-text">{evaluation.feedback[i]}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <button 

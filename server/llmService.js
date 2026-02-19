@@ -115,22 +115,31 @@ const evaluateAnswers = async (questions, answers) => {
     });
 
     const prompt = `
-        You are a strict technical interviewer.
-        Evaluate the following Candidate Answers against the Interview Questions.
-        
+        You are a senior technical interviewer.
+        Evaluate the candidate’s answers carefully.
+
         INTERVIEW DATA:
         ${qaText}
-        
-        CRITERIA:
-        1. Accuracy: Are the answers technically correct?
-        2. Relevance: Do they directly address the question?
-        3. Depth: Does the candidate demonstrate sufficient understanding?
-        
+
+        For each answer:
+        - Score from 0 to 10
+        - Give short feedback
+
+        Also provide:
+        - Overall score (0–10)
+        - Top 3 strengths
+        - Top 3 weaknesses
+        - Final recommendation: "Strong Hire", "Hire", "Consider", or "Reject"
+
         OUTPUT FORMAT:
-        Provide the response ONLY as a valid JSON object.
+        Return strictly in JSON format:
         {
-            "score": <number 0-10>,
-            "feedback": "<string: A consolidated summary of the evaluation, highlighting key strengths and major errors. be professional but strict.>"
+            "scores": [number, number, ...],
+            "feedback": ["feedback for Q1", "feedback for Q2", ...],
+            "overall_score": number,
+            "strengths": ["strength 1", "strength 2", ...],
+            "weaknesses": ["weakness 1", "weakness 2", ...],
+            "recommendation": "Strong Hire" | "Hire" | "Consider" | "Reject"
         }
     `;
 

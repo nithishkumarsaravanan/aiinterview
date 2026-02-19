@@ -18,8 +18,12 @@ const interviewSchema = new mongoose.Schema({
         default: []
     },
     evaluation: {
-        score: Number,
-        feedback: String
+        scores: [Number],
+        feedback: [String],
+        overall_score: Number,
+        strengths: [String],
+        weaknesses: [String],
+        recommendation: String
     },
     createdAt: {
         type: Date,
