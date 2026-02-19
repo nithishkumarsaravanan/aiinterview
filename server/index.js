@@ -1,26 +1,29 @@
 const express = require('express');
-const cors = require('cors');
-const interviewRoutes = require('./interviewRoutes');
-require('dotenv').config();
-
 const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-// Database Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/ai-interviewer')
-.then(() => console.log('MongoDB connected successfully'))
-.catch(err => console.error('MongoDB connection error:', err));
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 // Routes
-app.use('/api', interviewRoutes);
+const interviewRoutes = require('./interviewRoutes');
+const candidateRoutes = require('./routes/candidateRoutes');
+const slotRoutes = require('./routes/slotRoutes');
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+app.use('/api', interviewRoutes);
+app.use('/api/candidates', candidateRoutes); // New
+app.use('/api/slots', slotRoutes);           // New
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));

@@ -107,7 +107,7 @@ const generateQuestions = async (jobDescription, resumeText) => {
  * @param {Array<string>} answers - The candidate's answers.
  * @returns {Promise<Object>} - The evaluation result { score, feedback }.
  */
-const evaluateAnswers = async (questions, answers) => {
+const evaluateAnswers = async (questions, answers, jobDescription) => {
     // Construct the Q&A text for the prompt
     let qaText = "";
     questions.forEach((q, i) => {
@@ -115,15 +115,24 @@ const evaluateAnswers = async (questions, answers) => {
     });
 
     const prompt = `
-        You are a senior technical interviewer.
-        Evaluate the candidate’s answers carefully.
+        You are a strict technical hiring manager and code reviewer.
+        Your goal is to evaluate the candidate's answers with high scrutiny.
+
+        CONTEXT (JOB DESCRIPTION):
+        ${jobDescription}
 
         INTERVIEW DATA:
         ${qaText}
 
+        EVALUATION RULES:
+        1.  **Technical Accuracy**: Incorrect technical claims must be penalized heavily.
+        2.  **Specificity**: Vague answers like "I will use a library" without naming it should get a low score.
+        3.  **Job Relevance**: Answers must align with the specific tech stack mentioned in the Job Description.
+        4.  **No Fluff**: Penalize buzzword stuffing if the underlying understanding is missing.
+
         For each answer:
-        - Score from 0 to 10
-        - Give short feedback
+        - Score from 0 to 10 (Be strict: 10 is reserved for perfect, production-ready answers).
+        - Feedback: Point out specifically what was wrong or missing. Correct any technical misconceptions.
 
         Also provide:
         - Overall score (0–10)

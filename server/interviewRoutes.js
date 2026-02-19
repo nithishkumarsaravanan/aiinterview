@@ -92,7 +92,7 @@ router.post('/evaluate-answers', async (req, res) => {
 
         // 3. Evaluate Answers via LLM
         const { evaluateAnswers } = require('./llmService');
-        const evaluation = await evaluateAnswers(interview.questions, answers);
+        const evaluation = await evaluateAnswers(interview.questions, answers, interview.jobDescription);
         
         console.log("Evaluation complete:", evaluation);
 
