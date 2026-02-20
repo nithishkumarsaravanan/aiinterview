@@ -88,6 +88,10 @@ const LandingPage = () => {
                     {status === 'ERROR' && <p className="error-text">Failed to submit. Please try again.</p>}
                 </form>
             </div>
+            
+            <footer className="footer">
+                <a href="/hr" className="admin-link">Admin Access</a>
+            </footer>
         </div>
     );
 };

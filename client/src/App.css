@@ -447,3 +447,86 @@ label {
   border-color: var(--text-main);
   background-color: transparent;
 }
+
+/* Layout Utilities */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.card {
+    background-color: var(--surface-color);
+    padding: 2.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--surface-border);
+    width: 100%;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+}
+
+/* Slots Grid */
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.slot-card {
+    background-color: #000;
+    border: 1px solid var(--surface-border);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.slot-card:hover {
+    border-color: var(--primary-accent);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--surface-border);
+    color: var(--text-main);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+    background-color: var(--text-main);
+    color: #000;
+}
+
+.loading, .error {
+    text-align: center;
+    padding: 4rem;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+/* Footer */
+.footer {
+    margin-top: 3rem;
+    text-align: center;
+    padding-bottom: 2rem;
+}
+
+.admin-link {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.admin-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
